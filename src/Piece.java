@@ -1,13 +1,25 @@
 class Piece {
-	
-	private boolean isAlive; // on board or not
-	private String colour; // red or black to represent team
 
-	public Piece() {
+    private int x, y;
+    private String colour;
 
-	}
+ public Piece(int x, int y, String colour) {
+        this.colour = colour;
+        this.isAlive = true;
+        this.x = x;
+        this.y = y;
+ }
 
-	public void move() {
+ public getX(){
+        return this.x;
+    }
 
-	}
+    public getY(){
+        return this.y;
+    }
+
+    public updateCoords(int newX, int newY){
+        this.x = newX;
+        this.y = newY;
+    }
 }
