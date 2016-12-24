@@ -23,14 +23,14 @@ class Game {
 	public Game(String name1, String name2, int colChoice) {
 		gameBoard = new Board();
 		if (colChoice == 0) {
-			player1 = new Player(name1, "Red");
-			player2 = new Player(name2, "Black");
+			player1 = new Player(name1, "red");
+			player2 = new Player(name2, "black");
 		} else {
-			player1 = new Player(name1, "Black");
-			player2 = new Player(name2, "Red");
+			player1 = new Player(name1, "black");
+			player2 = new Player(name2, "red");
 		}
 		isPlaying = true;
-		draw();
+		playerInfo();
 		play();
 	}
 
@@ -40,26 +40,37 @@ class Game {
 	* will take movement commands from player
 	*/
 
-	public play() {
+	public void play() {
 		String currentPlayer, command;
 		while(isPlaying) {
-			System.out.println("Enter blah blah blah")
-			command = in.nextLine;
+			game.displayBoard();
+			System.out.print("Player1 move: ");
+			command = in.nextLine();
 			if (command.equals("exit")) {
 				isPlaying = false;
 			}
 		}
 	}
 
+	public boolean parseCommand(String command) {
+
+	}
+
 	/*
-	* test method for showing stuff
+	* test method for showing player information
 	*/
 
-	public static void draw() {
+	public static void playerInfo() {
 		clear();
-		System.out.println("Player1: " + player1.getName() + " - " + player1.getColour() + ".");
-		System.out.println("Player2: " + player2.getName() + " - " + player2.getColour() + ".");
+		System.out.println("Player1: " + player1.getName() + " - " + player1.getColour() 
+			+ " ( " + player1.getSymbol + ").");
+		System.out.println("Player2: " + player2.getName() + " - " + player2.getColour() 
+			+ " ( " + player2.getSymbol + ").");
 		prompt();
+	}
+
+	public void instructions() {
+
 	}
 
 	/*
@@ -79,6 +90,7 @@ class Game {
 		System.out.println("    \\              /    ");
 		System.out.println("     **************     ");
 		prompt();
+		clear();
 	}
 
 	/*
@@ -97,7 +109,7 @@ class Game {
 	*/
 
 	public static void clear() {
-		for (int i=0; i<50; i++)
+		for (int i=0; i<35; i++)
 			System.out.println();
 	}
 
@@ -113,15 +125,19 @@ class Game {
 	/*
 	* main method
 	* 
-	* 1) setup player names and colors
+	* - play intro
+	* - setup player names and colors
+	* - create instance of game
 	*/
 
 	public static void main(String args[]) {
-		title();
-		System.out.println("Enter player 1: ");
+		intro();
+		System.out.print("Enter player 1: ");
 		String name1 = in.nextLine();
-		System.out.println("Enter player 2: ");
+		clear();
+		System.out.print("Enter player 2: ");
 		String name2 = in.nextLine();
+		clear();
 		int colChoice = rand.nextInt(2); // random number betweeon 0 - 1
 		Game game = new Game(name1, name2, colChoice); // initialize game
 		outro();
