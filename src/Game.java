@@ -13,6 +13,8 @@ class Game {
 	static Scanner in = new Scanner(System.in);
 	static Random rand = new Random();
 
+	private boolean isPlaying;
+
 	/*
 	* colChoice is initialized in the main method as either 0 or 1
 	* colChoice determines which player is red or black
@@ -27,11 +29,30 @@ class Game {
 			player1 = new Player(name1, "Black");
 			player2 = new Player(name2, "Red");
 		}
+		isPlaying = true;
 		draw();
+		play();
 	}
 
 	/*
-	* Show the board
+	* This is the main game loop
+	* will loop as long as isPlaying is true
+	* will take movement commands from player
+	*/
+
+	public play() {
+		String currentPlayer, command;
+		while(isPlaying) {
+			System.out.println("Enter blah blah blah")
+			command = in.nextLine;
+			if (command.equals("exit")) {
+				isPlaying = false;
+			}
+		}
+	}
+
+	/*
+	* test method for showing stuff
 	*/
 
 	public static void draw() {
@@ -43,16 +64,30 @@ class Game {
 
 	/*
 	* Title Screen before game starts
-	* will contain a text-art checkers crown
+	* contains text-art checkers crown
 	*/
 
-	public static void title() {
-		System.out.println("-- Welcome to chess --");
-		System.out.println("----------------------");
-		System.out.println(""); // 
-		System.out.println("");
-		System.out.println("");
-		System.out.println("");
+	public static void intro() {
+		clear();
+		System.out.println("------- CHECKERS -------");
+		System.out.println("------------------------");
+		System.out.println("                        ");
+		System.out.println("* ** ** ** ** ** ** ** *");
+		System.out.println(" \\/\\ /\\ /\\ /\\ /\\ /\\ /\\/ ");
+		System.out.println("  \\                  /  ");
+		System.out.println("   \\                /   ");
+		System.out.println("    \\              /    ");
+		System.out.println("     **************     ");
+		prompt();
+	}
+
+	/*
+	* Exit screen after game ends
+	*/
+
+	public static void outro() {
+		clear();
+		System.out.println("Thankyou for playing!");
 		prompt();
 	}
 
@@ -83,14 +118,12 @@ class Game {
 
 	public static void main(String args[]) {
 		title();
-
 		System.out.println("Enter player 1: ");
 		String name1 = in.nextLine();
 		System.out.println("Enter player 2: ");
 		String name2 = in.nextLine();
-
 		int colChoice = rand.nextInt(2); // random number betweeon 0 - 1
-
-		Game game = new Game(name1, name2, colChoice);
+		Game game = new Game(name1, name2, colChoice); // initialize game
+		outro();
 	}
 }
