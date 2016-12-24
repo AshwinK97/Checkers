@@ -5,24 +5,23 @@ class Piece {
 
 	public Piece(int x, int y, String colour) {
         this.colour = colour;
-        this.isAlive = true;
         this.x = x;
         this.y = y;
 	}
 
-	public getX(){
+    public int getX(){
         return this.x;
     }
 
-    public getY(){
+    public int getY(){
         return this.y;
     }
 
-    public getColour(){
+    public String getColour(){
         return colour;
     }
 
-    public updateCoords(int newX, int newY){
+    public void updateCoords(int newX, int newY){
         this.x = newX;
         this.y = newY;
     }
