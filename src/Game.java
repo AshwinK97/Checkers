@@ -1,4 +1,3 @@
-
 /**
  * Text based checkers game
  * Author: Fidel Stalin, SentouSlayWalrus, Kotsauce
@@ -12,6 +11,7 @@ class Game {
  
     private static Board gameBoard;
     private static Player[] players;
+    private static Score[] scores;
     static Scanner in = new Scanner(System.in);
     static Random rand = new Random();
     
@@ -27,8 +27,11 @@ class Game {
     public Game(String name1, String name2, String col1, String col2) {
         gameBoard = new Board();
         players = new Player[2];
+        scores = new Score[2];
         players[0] = new Player(name1, col1);
         players[1] = new Player(name2, col2);
+        scores[0] = new Score(name1);
+        scores[1] = new Score(name2);
         isPlaying = true;
         playerInfo();
         loadCharInts();
@@ -41,22 +44,28 @@ class Game {
      */
     
     public void play() {
-        String currentPlayer, from, to;
+        String currentPlayer, from = "", to = "", buffer = "";
         while (isPlaying) {
             for (int i = 0; i < players.length; i++) {
-                // clear(); // uncomment this once finished
-                gameBoard.displayBoard(); // show board before each move
                 do { // check if user input is valid before proceeding
+                	// clear(); // uncomment this once finished
+                	scores[0].displayScore(); // show player 1 score
+                	gameBoard.displayBoard(); // show board before
+                	scores[1].displayScore(); // show player 2 score
                     System.out.println();
                     System.out.print(players[i].getName() + " [" + players[i].getSymbol() + "]" + " select a piece: ");
-                    from = in.nextLine();
+                    buffer = in.nextLine();
+                    if (checkSpecialCommands(buffer)) // check for special commands
+                    	continue;
+                    from = buffer;
                     System.out.print(players[i].getName() + " [" + players[i].getSymbol() + "]" + " select a location: ");
-                    to = in.nextLine();
-                } while (!parseCommand(from + to, players[i].getSymbol())); // concatinate
-                // both
-                // commands
-                // and
-                // check
+                    buffer = in.nextLine();
+                    if (checkSpecialCommands(buffer)) // check for special commands
+                    	continue;
+                    to = buffer;
+                } while (!parseCommand(from + to, players[i].getSymbol()) && isPlaying);
+                if (!isPlaying)
+                	break;
             }
         }
     }
@@ -64,30 +73,66 @@ class Game {
     /*
      * checks if movement command is valid or not if valid, parses and sends
      * commands to gameBoard returns true if successful
+     * movePiece returns either 
+     	-1: for an invalid input
+         0: for move
+         1: single jump
      */
     
     public boolean parseCommand(String command, String colour) {
-
+    	int moveResult = 0;
         if (command.length() == 4 && 
         	charInts.containsKey(command.substring(0, 1)) && 
-        	charInts.containsKey(command.substring(0, 1)) && 
+        	charInts.containsKey(command.substring(2, 3)) && 
         	Integer.parseInt(command.substring(1, 2)) >= 0 && 
         	Integer.parseInt(command.substring(1, 2)) <= 7 && 
         	Integer.parseInt(command.substring(3, 4)) >= 0 && 
         	Integer.parseInt(command.substring(3, 4)) <= 7) {
             
-            gameBoard.movePiece(
+            moveResult = gameBoard.movePiece(
             	charInts.get(command.substring(0, 1)), 
             	Integer.parseInt(command.substring(1, 2)),
             	charInts.get(command.substring(2, 3)), 
             	Integer.parseInt(command.substring(3, 4)),
             	colour);
 
+            if (moveResult == -1) {
+            	System.out.println("Invalid input");
+        		return false;
+            }
+            
+            if (players[0].getSymbol().equals(colour))
+            	scores[0].addScore(moveResult);
+            else
+            	scores[1].addScore(moveResult);
+
             return true;
         }
         System.out.println("Invalid input");
         return false;
     }
+
+    /*
+    * takes commands user enteres while playing.
+    * checks for special commands like 'help' and 'exit'.
+    */
+
+    public boolean checkSpecialCommands(String command) {
+    	if (command.toLowerCase().equals("exit")) {
+    		isPlaying = false;
+    		return true;
+    	} else if (command.toLowerCase().equals("help")) {
+    		instructions();
+    		return true;
+    	}
+    	return false;
+    }
+
+    /*
+    * creates a dictionary of String, Integer pairs.
+    * dictionary is used to convert letter coordinates
+    * to number indexes on the board array.
+    */
     
     public void loadCharInts() {
         charInts = new HashMap<String, Integer>();
@@ -102,13 +147,22 @@ class Game {
     public static void playerInfo() {
         clear();
         for (int i = 0; i < players.length; i++)
-            System.out.println("Player " + (i + 1) + ": " + players[i].getName() + " - " + players[i].getColour() + " (" + players[i].getSymbol() + ").");
+            System.out.println("Player " + (i + 1) + ": " +
+             players[i].getName() + " - " +
+             players[i].getColour() + " (" +
+             players[i].getSymbol() + ").");
         prompt();
         clear();
     }
     
-    public void instructions() {
-        
+    /*
+    * Show instructions before game starts or whenever a player enters 'help'
+    */
+    public static void instructions() {
+    	clear();
+        System.out.println(" <instructions go here>");
+        prompt();
+        clear();
     }
     
     /*
@@ -154,6 +208,7 @@ class Game {
      */
     
     public static void prompt() {
+    	System.out.println();
         System.out.println(" <enter to continue> ");
         in.nextLine();
     }
@@ -165,6 +220,9 @@ class Game {
     public static void main(String args[]) {
         // play intro
         intro();
+
+        // show instructions
+        instructions();
         
         // let players enter their names
         System.out.print("Enter player 1: ");
@@ -181,6 +239,7 @@ class Game {
             game = new Game(name1, name2, "red", "black");
         else
             game = new Game(name1, name2, "black", "red");
-        outro();
+
+        outro(); // play outro
     }
 }

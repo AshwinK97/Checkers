@@ -1,6 +1,5 @@
-
-
 public class Score {
+
 	private int score;
 	private String name;
 
@@ -10,27 +9,31 @@ public class Score {
 	}
 
 	public int getScore() {
-		return 0;
+		return score;
 	}
 
-	public void setScore(int score) {
+	public void addScore(int score) {
 		this.score += score;
 	}
-	public void displayScore(){
-		int length = 20;
-		int linelength = length;
+
+	public void displayScore() {
+		int length = 25;
+		int lineLength = length;
 		String line = name + ": "+ score;
-		linelength -= line.length() + 1;
+		lineLength -= line.length() + 1;
+
+		System.out.print(" ");
 		for (int i = 0; i< length; i++)
 			System.out.print("=");
 		System.out.println();
 		System.out.print("|"+line);
-		for (int i = 0; i<linelength; i++)
+		for (int i = 0; i<lineLength; i++)
 			System.out.print(" ");
 		System.out.println("|");
+
+		System.out.print(" ");
 		for (int i = 0; i< length; i++)
 			System.out.print("=");
 		System.out.println();
 	}
-
 }
