@@ -47,20 +47,21 @@ class Board {
         }
     }
 
-    private boolean inBoundary(int x, int y, int newX, int newY) {
-        if (x >= 0 && x < size) {
-            if (y >= 0 && y < size) {
+    private boolean inBoundary(int newX, int newY) {
+        if (newX >= 0 && newX < size) {
+            if (newY >= 0 && newY < size) {
                 return true;
             }
         }
         return false;
     }
 
+
 // returns -1 if invalid, 0 if move diagonal once, and 1 if jump over piece
     public int movePiece(int x, int y, int newX, int newY, String colour) {
         int xDiff = newX - x;
         int yDiff = newY - y;
-        if (colour == gameBoard[x][y].getColour() && colour != " ") {
+        if (colour == gameBoard[x][y].getColour() && colour != " " && inBoundary(newX, newY)) {
             if (colour == "X") {
                 if (Math.abs(xDiff) == Math.abs(yDiff) && yDiff > 0) {
                     if (xDiff == -1 || xDiff == 1) {
@@ -68,8 +69,6 @@ class Board {
                             gameBoard[newX][newY] = gameBoard[x][y];
                             gameBoard[x][y] = new Piece(x, y, " ");
                             return 0;
-                        } else {
-                            System.out.println("Invalid Move.");
                         }
                     } else if (xDiff == 2 || xDiff == -2) {
                         if (gameBoard[x + xDiff][newY].getColour() == " ") {
@@ -79,8 +78,6 @@ class Board {
                                     gameBoard[x][y] = new Piece(x, y, " ");
                                     gameBoard[x + 1][y + 1] = new Piece(x, y, " ");
                                     return 1;
-                                } else {
-                                    System.out.println("Invalid Move.");
                                 }
                             } else if (xDiff == -2) {
                                 if (gameBoard[x - 1][y + 1].getColour() == "O") {
@@ -88,18 +85,10 @@ class Board {
                                     gameBoard[x][y] = new Piece(x, y, " ");
                                     gameBoard[x - 1][y + 1] = new Piece(x, y, " ");
                                     return 1;
-                                } else {
-                                    System.out.println("Invalid Move.");
                                 }
                             }
-                        } else {
-                        	System.out.println("Invalid Move.");
                         }
-                    } else {
-                        System.out.println("Invalid Move.");
                     }
-                } else {
-                    System.out.println("Invalid Move.");
                 }
             } else if (colour == "O") {
                 if (Math.abs(xDiff) == Math.abs(yDiff) && yDiff < 0) {
@@ -108,8 +97,6 @@ class Board {
                             gameBoard[newX][newY] = gameBoard[x][y];
                             gameBoard[x][y] = new Piece(x, y, " ");
                             return 0;
-                        } else {
-                            System.out.println("Invalid Move.");
                         }
                     } else if (xDiff == 2 || xDiff == -2) {
                         if (gameBoard[x + xDiff][newY].getColour() == " ") {
@@ -119,8 +106,6 @@ class Board {
                                     gameBoard[x][y] = new Piece(x, y, " ");
                                     gameBoard[x + 1][y - 1] = new Piece(x, y, " ");
                                     return 1;
-                                } else {
-                                    System.out.println("Invalid Move.");
                                 }
                             } else if (xDiff == -2) {
                                 if (gameBoard[x - 1][y - 1].getColour() == "X") {
@@ -128,24 +113,12 @@ class Board {
                                     gameBoard[x][y] = new Piece(x, y, " ");
                                     gameBoard[x - 1][y - 1] = new Piece(x, y, " ");
                                     return 1;
-                                } else {
-                                    System.out.println("Invalid Move.");
                                 }
-                            } else {
-                            	System.out.println("Invalid Move.");
                             }
                         }
-                    } else {
-                        System.out.println("Invalid Move.");
                     }
-                } else {
-                    System.out.println("Invalid Move.");
                 }
-            } else {
-                System.out.println("Invalid Move.");
             }
-        } else {
-        	System.out.println("Invalid Move.");
         }
         return -1;
     }
