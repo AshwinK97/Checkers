@@ -9,7 +9,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 class Game {
-    
+ 
     private static Board gameBoard;
     private static Player[] players;
     static Scanner in = new Scanner(System.in);
