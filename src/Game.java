@@ -11,7 +11,6 @@ class Game {
  
     private static Board gameBoard;
     private static Player[] players;
-    private static Score[] scores;
     static Scanner in = new Scanner(System.in);
     static Random rand = new Random();
     
@@ -27,20 +26,18 @@ class Game {
     public Game(String name1, String name2, String col1, String col2) {
         gameBoard = new Board();
         players = new Player[2];
-        scores = new Score[2];
         players[0] = new Player(name1, col1);
         players[1] = new Player(name2, col2);
-        scores[0] = new Score(name1);
-        scores[1] = new Score(name2);
+
         isPlaying = true;
-        playerInfo();
-        loadCharInts();
-        play();
+        playerInfo(); // show player information
+        loadCharInts(); // load coordinate dictionary
+        play(); // start game loop
     }
     
     /*
      * This is the main game loop will loop as long as isPlaying is true will
-     * take movement commands from user
+     * take commands from user
      */
     
     public void play() {
@@ -49,9 +46,9 @@ class Game {
             for (int i = 0; i < players.length; i++) {
                 do { // check if user input is valid before proceeding
                 	// clear(); // uncomment this once finished
-                	scores[0].displayScore(); // show player 1 score
+                	players[0].displayScore(); // show player 1 score
                 	gameBoard.displayBoard(); // show board before
-                	scores[1].displayScore(); // show player 2 score
+                	players[1].displayScore(); // show player 2 score
                     System.out.println();
                     System.out.print(players[i].getName() + " [" + players[i].getSymbol() + "]" + " select a piece: ");
                     buffer = in.nextLine();
@@ -97,18 +94,18 @@ class Game {
             	colour);
 
             if (moveResult == -1) {
-            	System.out.println("Invalid input");
+            	System.out.println(" <invalid input> ");
         		return false;
             }
             
             if (players[0].getSymbol().equals(colour))
-            	scores[0].addScore(moveResult);
+            	players[0].addScore(moveResult);
             else
-            	scores[1].addScore(moveResult);
+            	players[1].addScore(moveResult);
 
             return true;
         }
-        System.out.println("Invalid input");
+        System.out.println(" <invalid input> ");
         return false;
     }
 

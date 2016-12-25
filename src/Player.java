@@ -1,12 +1,13 @@
 class Player {
+    private Score score;
     private String name, colour;
     private String symbol;
-    private int score;
+    
     
     public Player(String name, String colour) {
         this.name = name;
-        this.score = 0;
         this.colour = colour;
+        score = new Score(name);
         if (colour.equals("red"))
             symbol = "X";
         else
@@ -25,11 +26,11 @@ class Player {
         return symbol;
     }
     
-    public int getScore() {
-        return score;
+    public void displayScore() {
+    	score.displayScore();
     }
     
-    public void addScore() {
-        score+=1;
+    public void addScore(int score) {
+        this.score.addScore(score);
     }
 }

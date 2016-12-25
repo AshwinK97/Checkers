@@ -8,10 +8,6 @@ public class Score {
 		this.name = name;
 	}
 
-	public int getScore() {
-		return score;
-	}
-
 	public void addScore(int score) {
 		this.score += score;
 	}
@@ -22,18 +18,23 @@ public class Score {
 		String line = name + ": "+ score;
 		lineLength -= line.length() + 1;
 
+		System.out.println(); // skip 1 line at the beginning
+
 		System.out.print(" ");
-		for (int i = 0; i< length; i++)
+		for (int i = 0; i< length; i++) // top row of '='
 			System.out.print("=");
+
 		System.out.println();
-		System.out.print("|"+line);
-		for (int i = 0; i<lineLength; i++)
+		System.out.print("| "+line); // open '|' + line goes here
+		for (int i = 0; i<lineLength; i++) // extra spaces
 			System.out.print(" ");
-		System.out.println("|");
+		System.out.println("|"); // close '|'
 
 		System.out.print(" ");
 		for (int i = 0; i< length; i++)
 			System.out.print("=");
 		System.out.println();
+
+		System.out.println(); // skip 1 line at the end
 	}
 }
