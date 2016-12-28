@@ -1,36 +1,44 @@
-
-
 public class Score {
+
 	private int score;
 	private String name;
 
 	public Score(String name) {
-		score = 0;
+		score = 11;
 		this.name = name;
 	}
 
-	public int getScore() {
-		return 0;
-	}
-
-	public void setScore(int score) {
+	public void addScore(int score) {
 		this.score += score;
 	}
-	public void displayScore(){
-		int length = 20;
-		int linelength = length;
-		String line = name + ": "+ score;
-		linelength -= line.length() + 1;
-		for (int i = 0; i< length; i++)
-			System.out.print("=");
-		System.out.println();
-		System.out.print("|"+line);
-		for (int i = 0; i<linelength; i++)
-			System.out.print(" ");
-		System.out.println("|");
-		for (int i = 0; i< length; i++)
-			System.out.print("=");
-		System.out.println();
+
+	public int getScore() {
+		return score;
 	}
 
+	public void displayScore() {
+		int length = 25;
+		int lineLength = length;
+		String line = name + ": "+ score;
+		lineLength -= line.length() + 1;
+
+		System.out.println(); // skip 1 line at the beginning
+
+		System.out.print(" ");
+		for (int i = 0; i< length; i++) // top row of '='
+			System.out.print("=");
+
+		System.out.println();
+		System.out.print("| "+line); // open '|' + line goes here
+		for (int i = 0; i<lineLength; i++) // extra spaces
+			System.out.print(" ");
+		System.out.println("|"); // close '|'
+
+		System.out.print(" ");
+		for (int i = 0; i< length; i++)
+			System.out.print("=");
+		System.out.println();
+
+		System.out.println(); // skip 1 line at the end
+	}
 }
