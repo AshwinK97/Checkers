@@ -4,12 +4,16 @@ public class Score {
 	private String name;
 
 	public Score(String name) {
-		score = 0;
+		score = 11;
 		this.name = name;
 	}
 
 	public void addScore(int score) {
 		this.score += score;
+	}
+
+	public int getScore() {
+		return score;
 	}
 
 	public void displayScore() {

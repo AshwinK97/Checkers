@@ -16,7 +16,7 @@ class Game {
 
     String letters[] = { "a", "b", "c", "d", "e", "f", "g", "h" };
     HashMap<String, Integer> charInts;
-    private boolean isPlaying;
+    private boolean isPlaying, won;
 
     /*
      * colChoice is initialized in the main method as either 0 or 1 colChoice
@@ -45,10 +45,19 @@ class Game {
         while (isPlaying) {
             for (int i = 0; i < players.length; i++) {
                 do { // check if user input is valid before proceeding
+                	if (checkWin())
+                		break;
                 	// clear(); // uncomment this once finished
-                	players[0].displayScore(); // show player 1 score
+                	if (players[0].getSymbol().equals("X"))
+                		players[0].displayScore(); // show playerX score
+                	else
+                		players[1].displayScore();
                 	gameBoard.displayBoard(); // show board before
-                	players[1].displayScore(); // show player 2 score
+                	if (players[0].getSymbol().equals("O"))
+                		players[0].displayScore(); // show player O score
+                	else
+                		players[1].displayScore();
+
                     System.out.println();
                     System.out.print(players[i].getName() + " [" + players[i].getSymbol() + "]" + " select a piece: ");
                     buffer = in.nextLine();
@@ -95,14 +104,13 @@ class Game {
 
             if (moveResult == -1) {
             	System.out.println(" <invalid input> ");
-        		return false;
+               return false;
             }
 
             if (players[0].getSymbol().equals(colour))
             	players[0].addScore(moveResult);
             else
             	players[1].addScore(moveResult);
-
             return true;
         }
         System.out.println(" <invalid input> ");
@@ -124,6 +132,24 @@ class Game {
     	}
     	return false;
     }
+
+    /*
+    * check for when a player reaches max score
+    * display the win screen and exit
+    */
+    public boolean checkWin() {
+      if (players[0].getScore() >= 12) {
+      	winScreen(players[0].getName());
+        isPlaying = false;
+        return true;
+      } 
+      else if (players[1].getScore() >= 12) {
+      	winScreen(players[1].getName());
+        isPlaying = false;
+        return true;
+      }
+      return false;
+   }
 
     /*
     * creates a dictionary of String, Integer pairs.
@@ -150,6 +176,35 @@ class Game {
              players[i].getSymbol() + ").");
         prompt();
         clear();
+    }
+
+    public void winScreen(String name) {
+    	clear();
+    	int length = 25;
+		int lineLength = length;
+		String line = name + " wins!";
+		lineLength -= line.length() + 1;
+
+		System.out.println(); // skip 1 line at the beginning
+
+		System.out.print(" ");
+		for (int i = 0; i< length; i++) // top row of '='
+			System.out.print("=");
+
+		System.out.println();
+		System.out.print("| "+line); // open '|' + line goes here
+		for (int i = 0; i<lineLength; i++) // extra spaces
+			System.out.print(" ");
+		System.out.println("|"); // close '|'
+
+		System.out.print(" ");
+		for (int i = 0; i< length; i++)
+			System.out.print("=");
+		System.out.println();
+
+		System.out.println(); // skip 1 line at the end
+    	prompt();
+    	clear();
     }
 
     /*
