@@ -1,6 +1,7 @@
 class Board {
     private int size = 8;
     public Piece gameBoard[][];
+    private int forcedMoves[][];
 
     public Board() {
         gameBoard = new Piece[8][8];
@@ -77,6 +78,7 @@ class Board {
                                     gameBoard[newX][newY] = gameBoard[x][y];
                                     gameBoard[x][y] = new Piece(x, y, " ");
                                     gameBoard[x + 1][y + 1] = new Piece(x, y, " ");
+                                    doubleJump(newX, newY, colour);
                                     return 1;
                                 }
                             } else if (xDiff == -2) {
@@ -84,6 +86,7 @@ class Board {
                                     gameBoard[newX][newY] = gameBoard[x][y];
                                     gameBoard[x][y] = new Piece(x, y, " ");
                                     gameBoard[x - 1][y + 1] = new Piece(x, y, " ");
+                                    doubleJump(newX, newY, colour);
                                     return 1;
                                 }
                             }
@@ -105,6 +108,7 @@ class Board {
                                     gameBoard[newX][newY] = gameBoard[x][y];
                                     gameBoard[x][y] = new Piece(x, y, " ");
                                     gameBoard[x + 1][y - 1] = new Piece(x, y, " ");
+                                    doubleJump(newX, newY, colour);
                                     return 1;
                                 }
                             } else if (xDiff == -2) {
@@ -112,6 +116,7 @@ class Board {
                                     gameBoard[newX][newY] = gameBoard[x][y];
                                     gameBoard[x][y] = new Piece(x, y, " ");
                                     gameBoard[x - 1][y - 1] = new Piece(x, y, " ");
+                                    doubleJump(newX, newY, colour);
                                     return 1;
                                 }
                             }
@@ -123,113 +128,100 @@ class Board {
         return -1;
     }
 
+    void doubleJump(int newX, int newY, String colour) {
+        // both are there
+        boolean hasMoved = false;
+        if (colour == "O" && inBoundary(newX+2, newY-2) && inBoundary(newX-2, newY-2) &&
+            (gameBoard[newX + 1][newY - 1].getColour() == "X") &&
+            (gameBoard[newX - 1][newY - 1].getColour() == "X") &&
+            (gameBoard[newX + 2][newY - 2].getColour() == " ") &&
+            (gameBoard[newX - 2][newY - 2].getColour() == " ")
+            ) {
+            System.out.print("While jumping you reached a spot with 2 possible paths, which will you take? ");
+            String path;
+            path = Game.in.nextLine();
+            if(path.equals("l")){
+                movePiece(newX, newY, newX-2, newY-2, colour);
+            }
+            else if(path.equals("r")) {
+                movePiece(newX, newY, newX+2, newY-2, colour);
+            }
+            else {
+                System.out.println();
+                System.out.println("Invalid path, choose either 'l' or 'r'");
+                doubleJump(newX, newY, colour);
+            }
+            hasMoved = true;
+        }
+        else if (colour == "O" && inBoundary(newX+2, newY-2) &&
+            (gameBoard[newX + 1][newY - 1].getColour() == "X") &&
+            (gameBoard[newX + 2][newY - 2].getColour() == " ")) {
+            movePiece(newX, newY, newX+2, newY-2, colour);
+            hasMoved = true;
+        }
+        else if (colour == "O" && inBoundary(newX-2, newY-2) &&
+            (gameBoard[newX - 1][newY - 1].getColour() == "X") &&
+            (gameBoard[newX - 2][newY - 2].getColour() == " ")) {
+            movePiece(newX, newY, newX - 2, newY - 2, colour);
+            hasMoved = true;
+        }
+        else if(colour == "X" && inBoundary(newX+2, newY+2) && inBoundary(newX-2, newY+2) &&
+            (gameBoard[newX + 1][newY - 1].getColour() == "O") &&
+            (gameBoard[newX - 1][newY - 1].getColour() == "O") &&
+            (gameBoard[newX + 2][newY - 2].getColour() == " ") &&
+            (gameBoard[newX - 2][newY - 2].getColour() == " ")) {
+            System.out.print("While jumping you reached a spot with 2 possible paths, which will you take? ");
+            String path;
+            path = Game.in.nextLine();
+            if(path.equals("l")){
+                movePiece(newX, newY, newX-2, newY+2, colour);
+            }
+            else if(path.equals("r")) {
+                movePiece(newX, newY, newX+2, newY+2, colour);
+            }
+            else {
+                System.out.println();
+                System.out.println("Invalid path, choose either 'l' or 'r'");
+                doubleJump(newX, newY, colour);
+            }
+            hasMoved = true;
+        }
+        else if (colour == "X" && inBoundary(newX+2, newY+2) &&
+            (gameBoard[newX + 1][newY + 1].getColour() == "O") &&
+            (gameBoard[newX + 2][newY + 2].getColour() == " ")) {
+            movePiece(newX, newY, newX + 2, newY + 2, colour);
+            hasMoved = true;
+        }
+        else if (colour == "X" && inBoundary(newX-2, newY+2) &&
+            (gameBoard[newX - 1][newY + 1].getColour() == "O") &&
+            (gameBoard[newX - 2][newY + 2].getColour() == " ")) {
+            movePiece(newX, newY, newX - 2, newY + 2, colour);
+            hasMoved = true;
+        }
+        if (hasMoved) displayBoard();
+    }
 
-    // // Boundary check to make sure movement is in board
-    // private boolean inBoundary(int x, int y, int newX, int newY) {
-    //     if(x >= 0 && x < size){
-    //         if(y>=0 && y < size){
-    //             return true;
+
+    // private void kingPiece(String colour) {
+    //     for(int i=0; i<size; i++){
+    //         if(gameBoard[i][size-1].colour == "X"){
+    //             gameBoard[i][size-1].colour = "x";
+    //         }
+    //         if(gameBoard[i][0].colour == "O"){
+    //             gameBoard[i][size-1].colour = "o";
     //         }
     //     }
-    //     return false;
     // }
 
-    //  // returns true if piece is moving in correct direction and checks boundaries
-    // private boolean isMovingForward(int x, int y, int newX, int newY, String colour) {
-    //     if(gameBoard[x][y].colour == "red"){
-    //         if(y < newY && inBoundary(x,y,newX,newY)) {
-    //             return "red";
-    //         }
-    //     }
-    //     else if(gameBoard[x][y].colour == "black"){
-    //         if(y > newY && inBoundary(x,y,newX,newY)) {
-    //             return "black";
-    //         }
-    //     }
-    //     return "";
-    // }
 
-    // private boolean moveForwardBool(int x, int y, int newX, int newY, String colour) {
-    //     if(gameBoard[x][y].colour == "red") {
-    //         if(y < newY && (newY - y) <= 2 && inBoundary(x,y,newX,newY)) {
-    //             if(newY - y == 1) {
+    // private void jumpForced(int x, int y, int newX, int newY, String colour) { //this only works for basic pieces moving diagonal-forward
+    //     for (int y=0; y<size; y++){
+    //         for(int x=0; x<size; x++){
+    //             if(gameBoard[x][y].getColour() == colour) {
 
     //             }
-    //             else if(newY - y == 2){
-    //                 if(isBoard[x][y].colour == "black")
-    //             }
     //         }
     //     }
-    //     else if(gameBoard[x][y].colour == "black") {
-
-    //     }
-
     // }
-
-
-
-
-
-
-    // // // returns true if piece is moving in correct direction and checks boundaries
-    // // private String isMovingForward(int x, int y, int newX, int newY, String colour) {
-    // //     if(gameBoard[x][y].colour == "red"){
-    // //         if(y < newY && inBoundary(x,y,newX,newY)) {
-    // //             return "red";
-    // //         }
-    // //     }
-    // //     else if(gameBoard[x][y].colour == "black"){
-    // //         if(y > newY && inBoundary(x,y,newX,newY)) {
-    // //             return "black";
-    // //         }
-    // //     }
-    // //     return "";
-    // // }
-
-
-    // // // checks if a player is trying to move his own piece
-    // // private boolean isPlayersPiece(int x, int y, String colour){
-    // //     if(gameBoard[x][y].colour == colour) {
-    // //         return true;
-    // //     }
-    // //     return false;
-    // // }
-
-    // // // is player forced to move diagonal on any of his pieces, if so is he moving it => t/f
-    // // private boolean checkDiagonals(int x, int y, int newX, int newY, String colour) {
-    // //     if(gameBoard[x][y])
-    // // }
-
-
-    // // // is the players move valid
-    // // private boolean isValid(int x, int y, int newX, int newY, String colour) {
-    // //     String playerColour = gameBoard[x][y].colour;
-    // //     if(isPlayersPiece(x, y,colour).equals(colour) && isMovingForward(x,y,newX,newY,colour)) {
-    // //         if(colour == "red") {
-
-    // //         }
-    // //         else if(colour == "black") {
-
-    // //         }
-    // //     }
-    // //     else {
-    // //         System.out.println("Invalid Move!");
-    // //     }
-    // // }
-
-
-
-    // // private jumpForced(int x, int y, int newX, int newY, String colour) { //this only works for basic pieces moving diagonal-forward
-    // //     for (int y=0; y<size; y++){
-    // //         for(int x=0; x<size; x++){
-
-    // //         }
-    // //     }
-    // // }
-
-    // // // moves a piece
-    // // public boolean move(int x, int y, int newX, int newY, String colour) {
-
-    // // }
 
 }
