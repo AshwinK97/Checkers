@@ -4,7 +4,7 @@ public class Score {
 	private String name;
 
 	public Score(String name) {
-		score = 11;
+		score = 0;
 		this.name = name;
 	}
 
